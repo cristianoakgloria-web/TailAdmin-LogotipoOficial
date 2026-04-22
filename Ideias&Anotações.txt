@@ -1,0 +1,56 @@
+Rotas para o sistema
+    1º Autenticação e Perfil (AuthenticatedSession)
+        a) (get) & (post): /login
+        b) (post): /logout
+        c) (get) & (post): /password/reset && /password/email
+        d) (get): /profile
+
+
+    2º Dashboard e Visão Geral
+        a) (get) /dashboard
+        b) (get) /notifications
+        c) (get): /info
+
+    3º Vendas e CMR
+        · Gestão de Pipeline
+            a) (get): /vendas/pipeline (Visualização do funil de vendas)
+            b) (post): /vendas/pipeline/negociacao (Criar nova oportunidade de negócio)
+            c) (patch): /vendas/pipeline/{id}/estagio (mover negociação entre etapas do funil)
+
+        · Base de Conhecimento de Clientes
+            a) (get): /vendas/clientes (Listagem geral da base de clientes)
+            b) (get): /vendas/clientes/{id} (Perfil detalhado do cliente)
+            c) (get): /vendas/clientes/{id}/historico (Linha do tempo de comunicações e pedidos anteriores)
+
+        · Automação de pedidos
+            a) (post): /vendas/pedidos/gerar-proposta (Criar proposta comercial técnica)
+            b) (post): /vendas/pedidos/{id}/converter (Fluxo automático: transforma proposta em ordem de produção/venda)
+
+    4º Gestão Financeira
+        · Dashboard de Fluxo de Caixa
+            a) (get): /financeiro/dashboard (Resumo em tempo real de entradas e saídas)
+            b) (get): /financeiro/previsoes (Relatório de projeções financeiras futuras)
+
+        · Controlo de Tesouraria
+            a) (get): /financeiro/tesouraria/alertas (Alertas automáticos de contas a pagar/receber vencendo)
+            b) (post): /financeiro/tesouraria/movimentar (Registro manual de entradas ou saídas de caixa)
+
+        · Conciliação de Vendas
+            a) (get): /financeiro/conciliacao
+            b) (post): /financeiro/conciliacao/confirmar (Baixa automática de títulos no sistema)
+
+    5º Fiscal & Contabilístico
+        · Exportação Inteligente
+            a) (get): /fiscal/relatorios (Filtros para geração de relatórios mensais)
+            b) (post): /fiscal/exportar-contabilista (Geração e envio de arquivos formatados para a contabilidade)
+
+        · Arquivo Digital
+            a) (get): /fiscal/arquivo-digital (Repositório de documentos físcais armazenados)
+            b) (post): /fiscal/arquivo-digital/upload (Upload e armazenamento seguro de faturas e recibos)
+            c) (get): /fiscal/arquivo-digital/download/{id} (Recuperação de documento digitalizado)
+
+    6º Configurações e Administração
+        a) (get) & (post): /users (Gestão de usuários do sistema e permissões)
+        b) (get) & (patch): /settings/company (Dados da empresa)
+        c) (get): /audit-logs (Logs de quem alterou o quê no sistema)
+        d) (get): /info/admin (Informações do sitema mais detalhados)
