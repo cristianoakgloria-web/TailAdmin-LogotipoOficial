@@ -29,4 +29,18 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+        // Um utilizador pode ter muitos cargos
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    /**
+     * Método auxiliar para verificar se o utilizador tem um cargo específico.
+     * Ex: $user->hasRole('admin')
+     */
+    public function hasRole($roleName)
+    {
+        return $this->roles()->where('name', $roleName)->exists();
+    }
 }

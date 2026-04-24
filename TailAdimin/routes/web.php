@@ -54,7 +54,7 @@ Route::middleware('auth')->group(function () {
 
         // Tesouraria [cite: 30, 31]
         Route::get('/tesouraria/alertas', [FinanceiroController::class, 'alertas']);
-        休Route::post('/tesouraria/movimentar', [FinanceiroController::class, 'movimentar']);
+        Route::post('/tesouraria/movimentar', [FinanceiroController::class, 'movimentar']);
 
         // Conciliação [cite: 31]
         Route::get('/conciliacao', [FinanceiroController::class, 'conciliacao']);
