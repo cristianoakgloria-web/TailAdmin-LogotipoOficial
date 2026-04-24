@@ -1,4 +1,5 @@
-Rotas para o sistema
+Rotas para o sistema:
+
     1º Autenticação e Perfil (AuthenticatedSession)
         a) (get) & (post): /login
         b) (post): /logout
@@ -54,3 +55,53 @@ Rotas para o sistema
         b) (get) & (patch): /settings/company (Dados da empresa)
         c) (get): /audit-logs (Logs de quem alterou o quê no sistema)
         d) (get): /info/admin (Informações do sitema mais detalhados)
+        
+        
+######################################################################################################################################################################       
+
+Usuários para o sitema:
+
+	1º Administrador: admin
+		Descrição:
+			- Visão geral do negócio.
+			
+		Principais Acessos:
+			- Todos os módulos, relatórios de lucro e configurações do sistema.
+		
+		Principais Restrições:
+			- Nehuma.
+			
+	2º Vendedor: vendedor
+		Descrição:
+			- Focado na operação comercial.
+		
+		Principais Acessos:
+			- Cadastro de clientes, gestão de pedidos e funil de vendas.
+			
+		Principais Restrições:
+			- Não vê o fluxo de caixa global nem lucros totais.
+	
+	3º Operador Financeiro: finance
+		Descrição:
+			- Responsável pela saúde do caixa.
+		
+		Principais Acessos:
+			- Contas a pagar/receber, conciliação bancária e fluxo de caixa.
+			
+		Principais Restrições:
+			- Não altera configurações fiscais ou deleta registros históricos.
+			
+	4º Contador: contador
+		Descrição:
+			- Acesso focado em conformidade.
+			
+		Principais Acessos:
+			- Exportação de arquivos (Excel/CSV) e repositório de documentos.
+			
+		Pricipais Restrições:
+			- Acesso apenas de leitura aos dados financeiros; não cria vendas.
+	
+	
+	
+	
+	

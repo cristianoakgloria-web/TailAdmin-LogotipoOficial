@@ -8,11 +8,7 @@ use App\Http\Controllers\FinanceiroController;
 use App\Http\Controllers\FiscalController;
 use App\Http\Controllers\AdminController;
 
-/*
-|--------------------------------------------------------------------------
-| 1º Autenticação e Perfil 
-|--------------------------------------------------------------------------
-*/
+// 1º Autenticação e Perfil
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
@@ -28,20 +24,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout'); //[cite: 27]
     Route::get('/profile', [AuthController::class, 'profile'])->name('profile'); //[cite: 27]
 
-    /*
-    |--------------------------------------------------------------------------
-    | 2º Dashboard e Visão Geral 
-    |--------------------------------------------------------------------------
-    */
+    //2º Dashboard e Visão Geral
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/notifications', [DashboardController::class, 'notifications']);
     Route::get('/info', [DashboardController::class, 'info']);
 
-    /*
-    |--------------------------------------------------------------------------
-    | 3º Vendas e CRM [cite: 28]
-    |--------------------------------------------------------------------------
-    */
+    // 3º Vendas e CRM [cite: 28]
     Route::prefix('vendas')->group(function () {
         // Gestão de Pipeline [cite: 28]
         Route::get('/pipeline', [VendasController::class, 'pipeline']);
@@ -58,11 +46,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/pedidos/{id}/converter', [VendasController::class, 'converterPedido']);
     });
 
-    /*
-    |--------------------------------------------------------------------------
-    | 4º Gestão Financeira [cite: 30]
-    |--------------------------------------------------------------------------
-    */
+    //4º Gestão Financeira [cite: 30]
     Route::prefix('financeiro')->group(function () {
         // Fluxo de Caixa [cite: 30]
         Route::get('/dashboard', [FinanceiroController::class, 'dashboard']);
@@ -77,11 +61,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/conciliacao/confirmar', [FinanceiroController::class, 'confirmarConciliacao']);
     });
 
-    /*
-    |--------------------------------------------------------------------------
-    | 5º Fiscal & Contabilístico [cite: 31, 32]
-    |--------------------------------------------------------------------------
-    */
+    //5º Fiscal & Contabilístico [cite: 31, 32]
     Route::prefix('fiscal')->group(function () {
         // Exportação [cite: 31, 32]
         Route::get('/relatorios', [FiscalController::class, 'relatorios']);
@@ -93,11 +73,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/arquivo-digital/download/{id}', [FiscalController::class, 'download']);
     });
 
-    /*
-    |--------------------------------------------------------------------------
-    | 6º Configurações e Administração 
-    |--------------------------------------------------------------------------
-    */
+    // 6º Configurações e Administração
     Route::middleware('can:admin-only')->group(function () {
         Route::get('/users', [AdminController::class, 'indexUsers']);
         Route::post('/users', [AdminController::class, 'storeUser']);
