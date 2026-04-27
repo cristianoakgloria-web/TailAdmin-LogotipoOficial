@@ -12,9 +12,6 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Role::create(['name' => 'admin', 'label' => 'Administrador']);
-        \App\Models\Role::create(['name' => 'vendedor', 'label' => 'Vendedor']);
-        \App\Models\Role::create(['name' => 'financeiro', 'label' => 'Financeiro']);
-        \App\Models\Role::create(['name' => 'contador', 'label' => 'Contador']);
+        //
     }
 }
