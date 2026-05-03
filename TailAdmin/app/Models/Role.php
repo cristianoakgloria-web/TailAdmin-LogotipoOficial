@@ -6,10 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
-    protected $fillable = ['name', 'label'];
+    /**
+     * The attributes that are mass assignable.
+     */
+    protected $fillable = [
+        'nome',
+        'slug',
+    ];
 
+    /**
+     * Relacionamento muitos-para-muitos com users
+     */
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'role_user', 'role_id', 'user_id')
+                    ->withTimestamps();
     }
 }
