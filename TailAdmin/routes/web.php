@@ -7,6 +7,7 @@ use App\Http\Controllers\VendasController;
 use App\Http\Controllers\FinanceiroController;
 use App\Http\Controllers\FiscalController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ClienteController;
 
 // ==========================================
 // ROTA PRINCIPAL
@@ -54,16 +55,17 @@ Route::middleware('auth')->group(function () {
     // ==========================================
     Route::prefix('vendas')->name('vendas.')->group(function () {
         
+        Route::get('/index', [VendasController::class, 'index'])->name('index');
+        Route::get('/create', [VendasController::class, 'create'])->name('create');
+        Route::get('/{id}', [VendasController::class, 'show'])->name('show');
+       
+
         // Gestão de Pipeline
         Route::get('/pipeline', [VendasController::class, 'pipeline'])->name('pipeline');
         Route::post('/pipeline/negociacao', [VendasController::class, 'storeNegociacao'])->name('storeNegociacao');
         Route::patch('/pipeline/{id}/estagio', [VendasController::class, 'updateEstagio'])->name('updateEstagio');
         
-        // Base de Conhecimento de Clientes
-        Route::get('/clientes', [VendasController::class, 'indexClientes'])->name('clientes');
-        Route::get('/clientes/{id}', [VendasController::class, 'showCliente'])->name('clientes.show');
-        Route::get('/clientes/{id}/historico', [VendasController::class, 'clienteHistorico'])->name('clientes.historico');
-        
+       
         // Automação de pedidos
         Route::post('/pedidos/gerar-proposta', [VendasController::class, 'gerarProposta'])->name('gerarProposta');
         Route::post('/pedidos/{id}/converter', [VendasController::class, 'converterPedido'])->name('converterPedido');
@@ -75,7 +77,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('financeiro')->name('financeiro.')->group(function () {
         
         // Fluxo de Caixa
-        Route::get('/dashboard', [FinanceiroController::class, 'dashboard'])->name('dashboard');
+        Route::get('/dashboard', [FinanceiroController::class, 'index'])->name('dashboard');
         Route::get('/previsoes', [FinanceiroController::class, 'previsoes'])->name('previsoes');
         
         // Tesouraria
@@ -92,6 +94,8 @@ Route::middleware('auth')->group(function () {
     // ==========================================
     Route::prefix('fiscal')->name('fiscal.')->group(function () {
         
+        Route::get('/index', [FiscalController::class, 'index'])->name('index');
+
         // Exportação
         Route::get('/relatorios', [FiscalController::class, 'relatorios'])->name('relatorios');
         Route::post('/exportar-contabilista', [FiscalController::class, 'exportar'])->name('exportar');
@@ -118,7 +122,22 @@ Route::middleware('auth')->group(function () {
         Route::patch('/settings/company', [AdminController::class, 'updateCompany'])->name('settings.company.update');
         
         // Auditoria
-        Route::get('/audit-logs', [AdminController::class, 'auditLogs'])->name('audit.logs');
+        Route::get('/audit-logs', [AdminController::class, 'indexLogs'])->name('audit-logs');
         Route::get('/info/admin', [AdminController::class, 'adminInfo'])->name('admin.info');
+    });
+
+    // ==========================================
+    // 8º ROTAS DE CLIENTES (CRUD)
+    // ==========================================
+    // Rotas para Clientes
+    // Gestão de Clientes - CORRETO
+    Route::prefix('clientes')->name('clientes.')->group(function () {
+        Route::get('/index', [ClienteController::class, 'index'])->name('index');
+        Route::get('/create', [ClienteController::class, 'create'])->name('create');
+        Route::post('/', [ClienteController::class, 'store'])->name('store');
+        Route::get('/{id}', [ClienteController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [ClienteController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [ClienteController::class, 'update'])->name('update');
+        Route::delete('/{id}', [ClienteController::class, 'destroy'])->name('destroy');
     });
 });

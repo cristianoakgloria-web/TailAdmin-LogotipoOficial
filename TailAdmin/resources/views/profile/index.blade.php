@@ -1,4 +1,12 @@
 {{-- Mostrar Roles do usuário (múltiplas roles) --}}
+@extends('layouts.app')
+
+@section('title', 'Perfil')
+@section('header', 'Perfil do Usuário')
+@section('subheader', 'Gerencie suas informações pessoais e níveis de acesso')
+
+@section('content')
+
 <div class="mt-4">
     <label class="block text-sm font-semibold text-[#eab308]/80 mb-2 uppercase tracking-wider">
         Níveis de Acesso
@@ -15,3 +23,4 @@
         @endforelse
     </div>
 </div>
+@endsection

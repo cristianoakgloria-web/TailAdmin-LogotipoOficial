@@ -12,4 +12,9 @@ class AdminController extends Controller
         $usuarios = User::with('role')->get();
         return view('admin.users', compact('usuarios'));
     }
+    public function indexLogs()
+    {
+        $logs = \Spatie\Activitylog\Models\Activity::with('causer')->latest()->get();
+        return view('auditoria.index');//, compact('logs'));
+    }
 }

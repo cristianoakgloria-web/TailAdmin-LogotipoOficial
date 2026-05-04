@@ -12,6 +12,6 @@ class FinanceiroController extends Controller
         $receitas = Pedido::where('status', 'pago')->paginate(15);
         $totalRecebido = Pedido::where('status', 'pago')->sum('valor_total');
 
-        return view('financeiro.index', compact('receitas', 'totalRecebido'));
+        return view('financeiro.dashboard', compact('receitas', 'totalRecebido'));
     }
 }

@@ -16,7 +16,7 @@ class DashboardController extends Controller
         // Últimos 5 pedidos para a tabela do dashboard
         $ultimosPedidos = Pedido::with('cliente')->latest()->take(5)->get();
 
-        return view('dashboard', compact(
+        return view('dashboard.index', compact(
             'totalClientes', 
             'totalVendas', 
             'pedidosPendentes', 
