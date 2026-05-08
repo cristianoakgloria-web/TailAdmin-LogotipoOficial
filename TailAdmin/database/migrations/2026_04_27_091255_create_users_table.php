@@ -9,8 +9,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id(); // Auto-increment INT
+            $table->id();
             $table->string('nome');
+            $table->enum('sexo', ['M', 'F'])->default('M');
+            $table->string('cargo')->default('Tesoureiro/a');
             $table->string('email')->unique();
             $table->string('password');
             $table->rememberToken();

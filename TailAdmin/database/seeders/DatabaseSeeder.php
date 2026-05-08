@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -29,87 +28,94 @@ class DatabaseSeeder extends Seeder
             );
         }
 
-        // Criar usuário admin
+        // Buscar roles
         $adminRole = Role::where('slug', 'admin')->first();
-        
-        $admin = User::updateOrCreate(
-            ['email' => 'admin@logotipooficial.ao'],
+        $gerenteRole = Role::where('slug', 'gerente')->first();
+        $vendedorRole = Role::where('slug', 'vendedor')->first();
+        $financeiroRole = Role::where('slug', 'financeiro')->first();
+        $fiscalRole = Role::where('slug', 'fiscal')->first();
+        $userRole = Role::where('slug', 'user')->first();
+
+        // Array de usuários com sexo
+        $usuarios = [
             [
                 'nome' => 'Administrador do Sistema',
+                'email' => 'admin@logotipooficial.ao',
                 'password' => Hash::make('admin123'),
-            ]
-        );
-        
-        // Atribuir role admin (sync sem duplicar)
-        $admin->roles()->sync([$adminRole->id]);
-
-        // Criar usuário gerente
-        $gerenteRole = Role::where('slug', 'gerente')->first();
-        
-        $gerente = User::updateOrCreate(
-            ['email' => 'gerente@logotipooficial.ao'],
+                'sexo' => 'M',
+                'cargo' => 'Tesoureiro',
+                'role' => $adminRole,
+            ],
             [
                 'nome' => 'João Silva',
+                'email' => 'gerente@logotipooficial.ao',
                 'password' => Hash::make('gerente123'),
-            ]
-        );
-        
-        $gerente->roles()->sync([$gerenteRole->id]);
-
-        // Criar usuário vendedor
-        $vendedorRole = Role::where('slug', 'vendedor')->first();
-        
-        $vendedor = User::updateOrCreate(
-            ['email' => 'vendedor@logotipooficial.ao'],
+                'sexo' => 'M',
+                'cargo' => 'Gerente',
+                'role' => $gerenteRole,
+            ],
             [
                 'nome' => 'Maria Santos',
+                'email' => 'vendedor@logotipooficial.ao',
                 'password' => Hash::make('vendedor123'),
-            ]
-        );
-        
-        $vendedor->roles()->sync([$vendedorRole->id]);
-
-        // Criar usuário financeiro
-        $financeiroRole = Role::where('slug', 'financeiro')->first();
-        
-        $financeiro = User::updateOrCreate(
-            ['email' => 'financeiro@logotipooficial.ao'],
+                'sexo' => 'F',
+                'cargo' => 'Vendedora',
+                'role' => $vendedorRole,
+            ],
             [
                 'nome' => 'Carlos Alberto',
+                'email' => 'financeiro@logotipooficial.ao',
                 'password' => Hash::make('financeiro123'),
-            ]
-        );
-        
-        $financeiro->roles()->sync([$financeiroRole->id]);
-
-        // Criar usuário fiscal
-        $fiscalRole = Role::where('slug', 'fiscal')->first();
-        
-        $fiscal = User::updateOrCreate(
-            ['email' => 'fiscal@logotipooficial.ao'],
+                'sexo' => 'M',
+                'cargo' => 'Financeiro',
+                'role' => $financeiroRole,
+            ],
             [
                 'nome' => 'Ana Paula',
+                'email' => 'fiscal@logotipooficial.ao',
                 'password' => Hash::make('fiscal123'),
-            ]
-        );
-        
-        $fiscal->roles()->sync([$fiscalRole->id]);
-
-        // Criar usuário comum
-        $userRole = Role::where('slug', 'user')->first();
-        
-        $user = User::updateOrCreate(
-            ['email' => 'teste@logotipooficial.ao'],
+                'sexo' => 'F',
+                'cargo' => 'Fiscal',
+                'role' => $fiscalRole,
+            ],
             [
                 'nome' => 'Utilizador Teste',
+                'email' => 'teste@logotipooficial.ao',
                 'password' => Hash::make('teste123'),
-            ]
-        );
-        
-        $user->roles()->sync([$userRole->id]);
-        
+                'sexo' => 'M',
+                'cargo' => 'Utilizador',
+                'role' => $userRole,
+            ],
+        ];
+
+        // Criar usuários e atribuir roles
+        foreach ($usuarios as $dados) {
+            $role = $dados['role'];
+            unset($dados['role']); // Remove 'role' do array antes de criar
+            
+            $user = User::updateOrCreate(
+                ['email' => $dados['email']],
+                $dados
+            );
+            
+            // Sincronizar role
+            $user->roles()->sync([$role->id]);
+        }
+
+        // Mensagens de sucesso
         $this->command->info('✅ Usuários criados com sucesso!');
-        $this->command->info('📧 admin@logotipooficial.ao | senha: admin123');
-        $this->command->info('📧 teste@logotipooficial.ao | senha: teste123');
+        $this->command->info('');
+        $this->command->info('📧 Acessos:');
+        $this->command->info('   admin@logotipooficial.ao | senha: admin123 (Admin)');
+        $this->command->info('   gerente@logotipooficial.ao | senha: gerente123 (Gerente)');
+        $this->command->info('   vendedor@logotipooficial.ao | senha: vendedor123 (Vendedora)');
+        $this->command->info('   financeiro@logotipooficial.ao | senha: financeiro123 (Financeiro)');
+        $this->command->info('   fiscal@logotipooficial.ao | senha: fiscal123 (Fiscal)');
+        $this->command->info('   teste@logotipooficial.ao | senha: teste123 (Utilizador)');
+        $this->command->info('');
+        $this->command->info('📋 Footer do Diário de Caixa:');
+        $this->command->info('   Admin: O TESOUREIRO - Administrador do Sistema');
+        $this->command->info('   Maria: A TESOUREIRA - Maria Santos');
+        $this->command->info('   Ana: A TESOUREIRA - Ana Paula');
     }
 }

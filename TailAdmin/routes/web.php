@@ -8,6 +8,23 @@ use App\Http\Controllers\FinanceiroController;
 use App\Http\Controllers\FiscalController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\DiarioCaixaController;
+use App\Http\Controllers\ArquivoCaixaController;
+
+// ==========================================
+// ROTAS DO DIÁRIO DE CAIXA
+// ==========================================
+Route::middleware(['auth'])->prefix('diario-caixa')->name('diario-caixa.')->group(function () {
+    Route::get('/', [DiarioCaixaController::class, 'index'])->name('index');
+    Route::post('/', [DiarioCaixaController::class, 'store'])->name('store');
+    Route::delete('/{id}', [DiarioCaixaController::class, 'destroy'])->name('destroy');
+    Route::post('/preview', [DiarioCaixaController::class, 'preview'])->name('preview');
+    Route::match(['GET', 'POST'], '/exportar', [DiarioCaixaController::class, 'exportar'])->name('exportar');
+    
+    // Gestão de Arquivos
+    Route::post('/arquivos', [ArquivoCaixaController::class, 'store'])->name('arquivos.store');
+    Route::delete('/arquivos/{id}', [ArquivoCaixaController::class, 'destroy'])->name('arquivos.destroy');
+});
 
 // ==========================================
 // ROTA PRINCIPAL
