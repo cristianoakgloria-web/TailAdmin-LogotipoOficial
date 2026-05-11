@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\DiarioCaixaController;
 use App\Http\Controllers\ArquivoCaixaController;
+use App\Http\Controllers\ProfileController;
 
 // ==========================================
 // ROTAS DO DIÁRIO DE CAIXA
@@ -56,10 +57,11 @@ Route::middleware('auth')->group(function () {
     
     // Logout e Perfil
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
-    Route::put('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
-    Route::put('/profile/password', [AuthController::class, 'updatePassword'])->name('password.update');
     
+    Route::get('/perfil', [AuthController::class, 'profile'])->name('profile.show');
+    Route::get('/perfil/editar', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/perfil', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/perfil', [ProfileController::class, 'destroy'])->name('profile.destroy');
     // ==========================================
     // 3º DASHBOARD E VISÃO GERAL
     // ==========================================

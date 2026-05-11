@@ -52,7 +52,7 @@
                 <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-[#0c0c0e] border border-[#eab308]/20 rounded-xl shadow-xl z-50" style="display: none;">
                     <div class="py-1">
                         <!-- Perfil -->
-                        <a href="{{ route('profile') }}" class="block px-4 py-2 text-sm text-gray-300 hover:text-[#eab308] hover:bg-[#eab308]/10 transition">
+                        <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-sm text-gray-300 hover:text-[#eab308] hover:bg-[#eab308]/10 transition">
                             <div class="flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
