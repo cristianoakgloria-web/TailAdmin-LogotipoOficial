@@ -34,9 +34,21 @@
                     <tr class="border-b border-[#eab308]/10 hover:bg-[#eab308]/5 transition">
                         <td class="p-3 text-gray-300">{{ $fat->numero_fatura }}</td>
                         <td class="p-3 text-gray-300">{{ $fat->cliente->nome }}</td>
-                        <td class="p-3 text-gray-300">{{ $fat->data_emissao->format('d/m/Y') }}</td>
-                        <td class="p-3 text-gray-300">{{ $fat->data_vencimento->format('d/m/Y') }}</td>
-                        <td class="p-3 text-gray-300">Kz {{ number_format($fat->valor_total, 2) }}</td>
+                        <td class="p-3 text-gray-300">
+                            @if($fat->data_emissao)
+                                {{ \Carbon\Carbon::parse($fat->data_emissao)->format('d/m/Y') }}
+                            @else
+                                —
+                            @endif
+                        </td>
+                        <td class="p-3 text-gray-300">
+                            @if($fat->data_vencimento)
+                                {{ \Carbon\Carbon::parse($fat->data_vencimento)->format('d/m/Y') }}
+                            @else
+                                —
+                            @endif
+                        </td>
+                        <td class="p-3 text-gray-300">Kz {{ number_format($fat->valor_total, 2, ',', '.') }}</td>
                         <td class="p-3">
                             <span class="px-2 py-1 rounded-full text-xs font-semibold
                                 @if($fat->status == 'paga') bg-green-500/20 text-green-400

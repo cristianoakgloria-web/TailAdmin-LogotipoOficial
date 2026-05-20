@@ -27,9 +27,14 @@ class ArquivoCaixa extends Model
     {
         return $this->belongsTo(User::class);
     }
-
+    /*
     public function transacoes()
     {
         return $this->hasMany(Transacao::class, 'arquivo_caixa_id');
+    }
+    */
+
+    public function transacoes() {
+        return $this->hasMany(Transacao::class);
     }
 }

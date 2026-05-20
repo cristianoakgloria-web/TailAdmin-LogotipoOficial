@@ -1,9 +1,9 @@
-{{-- Edit Profile Page --}}
+{{-- Edit Profile Page (sem cargo, sem exclusão) --}}
 @extends('layouts.app')
 
 @section('title', 'Editar Perfil')
 @section('header', 'Editar Perfil')
-@section('subheader', 'Atualize suas informações pessoais e profissionais')
+@section('subheader', 'Atualize suas informações pessoais')
 
 @section('content')
 <div class="max-w-4xl mx-auto">
@@ -92,31 +92,10 @@
                         <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
                     @enderror
                 </div>
-                
-                <div>
-                    <label for="cargo" class="block text-sm font-medium text-zinc-300 mb-2">
-                        Cargo
-                    </label>
-                    <select name="cargo" 
-                            id="cargo" 
-                            class="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-2.5 text-white 
-                                   focus:outline-none focus:border-[#eab308] focus:ring-1 focus:ring-[#eab308] 
-                                   transition-all duration-200">
-                        <option value="Tesoureiro/a" {{ old('cargo', $user->cargo) == 'Tesoureiro/a' ? 'selected' : '' }}>Tesoureiro/a</option>
-                        <option value="Presidente" {{ old('cargo', $user->cargo) == 'Presidente' ? 'selected' : '' }}>Presidente</option>
-                        <option value="Vice-Presidente" {{ old('cargo', $user->cargo) == 'Vice-Presidente' ? 'selected' : '' }}>Vice-Presidente</option>
-                        <option value="Secretário/a" {{ old('cargo', $user->cargo) == 'Secretário/a' ? 'selected' : '' }}>Secretário/a</option>
-                        <option value="Membro" {{ old('cargo', $user->cargo) == 'Membro' ? 'selected' : '' }}>Membro</option>
-                        <option value="Administrador" {{ old('cargo', $user->cargo) == 'Administrador' ? 'selected' : '' }}>Administrador</option>
-                    </select>
-                    @error('cargo')
-                        <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
-                    @enderror
-                </div>
             </div>
         </div>
 
-        {{-- Informações de Acesso --}}
+        {{-- Informações de Acesso (Senha) --}}
         <div class="bg-zinc-900/50 backdrop-blur-sm rounded-2xl border border-zinc-800 p-6">
             <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
                 <svg class="w-5 h-5 mr-2 text-[#eab308]" fill="currentColor" viewBox="0 0 20 20">
@@ -174,29 +153,6 @@
             </div>
         </div>
 
-        {{-- Informações da Conta --}}
-        <div class="bg-zinc-900/50 backdrop-blur-sm rounded-2xl border border-zinc-800 p-6">
-            <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
-                <svg class="w-5 h-5 mr-2 text-[#eab308]" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/>
-                    <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"/>
-                </svg>
-                Informações da Conta
-            </h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <p class="text-xs text-zinc-500">Data de Registro</p>
-                    <p class="text-sm text-zinc-300 mt-1">{{ $user->created_at ? $user->created_at->format('d/m/Y H:i:s') : 'Não disponível' }}</p>
-                </div>
-                
-                <div>
-                    <p class="text-xs text-zinc-500">Última Atualização</p>
-                    <p class="text-sm text-zinc-300 mt-1">{{ $user->updated_at ? $user->updated_at->format('d/m/Y H:i:s') : 'Não disponível' }}</p>
-                </div>
-            </div>
-        </div>
-
         {{-- Botões de Ação --}}
         <div class="flex justify-end gap-3">
             <a href="{{ route('profile.show') }}" 
@@ -210,27 +166,6 @@
             </button>
         </div>
     </form>
-
-    {{-- Seção de Perigo (Delete Account) --}}
-    <div class="mt-8 bg-red-500/10 border border-red-500/30 rounded-2xl p-6">
-        <h3 class="text-lg font-semibold text-red-400 mb-2 flex items-center">
-            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
-            </svg>
-            Zona de Perigo
-        </h3>
-        <p class="text-sm text-zinc-400 mb-4">
-            Ao deletar sua conta, todos os seus dados serão permanentemente removidos. Esta ação não pode ser desfeita.
-        </p>
-        <form action="{{ route('profile.destroy') }}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar sua conta? Esta ação é irreversível!');">
-            @csrf
-            @method('DELETE')
-            <button type="submit" 
-                    class="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-xl transition-all duration-200">
-                Deletar Conta
-            </button>
-        </form>
-    </div>
 </div>
 @endsection
 
@@ -266,19 +201,18 @@
             currentPasswordInput.addEventListener('input', validatePassword);
         }
         
-        // Tooltips e feedback visual
+        // Feedback visual nos campos
         const inputs = document.querySelectorAll('input, select');
         inputs.forEach(input => {
             input.addEventListener('focus', function() {
                 this.parentElement.classList.add('ring-1', 'ring-[#eab308]/50');
             });
-            
             input.addEventListener('blur', function() {
                 this.parentElement.classList.remove('ring-1', 'ring-[#eab308]/50');
             });
         });
         
-        // Confirmação antes de salvar com senha
+        // Validação final antes de submeter
         const form = document.querySelector('form');
         if (form) {
             form.addEventListener('submit', function(e) {

@@ -10,6 +10,9 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\DiarioCaixaController;
 use App\Http\Controllers\ArquivoCaixaController;
+use App\Http\Controllers\FaturaController;
+use App\Http\Controllers\PagamentoController;
+
 use App\Http\Controllers\ProfileController;
 
 // ==========================================
@@ -25,6 +28,29 @@ Route::middleware(['auth'])->prefix('diario-caixa')->name('diario-caixa.')->grou
     // Gestão de Arquivos
     Route::post('/arquivos', [ArquivoCaixaController::class, 'store'])->name('arquivos.store');
     Route::delete('/arquivos/{id}', [ArquivoCaixaController::class, 'destroy'])->name('arquivos.destroy');
+});
+
+// ==========================================
+// ROTAS DO DIÁRIO DE CAIXA
+// ==========================================
+Route::middleware(['auth'])->prefix('diario-caixa')->name('diario-caixa.')->group(function () {
+    Route::get('/', [DiarioCaixaController::class, 'index'])->name('index');
+    Route::post('/', [DiarioCaixaController::class, 'store'])->name('store');
+    Route::delete('/{id}', [DiarioCaixaController::class, 'destroy'])->name('destroy');
+    Route::post('/preview', [DiarioCaixaController::class, 'preview'])->name('preview');
+    Route::match(['GET', 'POST'], '/exportar', [DiarioCaixaController::class, 'exportar'])->name('exportar');
+    
+    Route::post('/arquivos', [ArquivoCaixaController::class, 'store'])->name('arquivos.store');
+    Route::delete('/arquivos/{id}', [ArquivoCaixaController::class, 'destroy'])->name('arquivos.destroy');
+});
+
+// ==========================================
+// ROTAS DE FATURAS E PAGAMENTOS (FORA DO DIÁRIO)
+// ==========================================
+Route::middleware('auth')->group(function () {
+    Route::resource('faturas', FaturaController::class);
+    Route::resource('pagamentos', PagamentoController::class);
+    Route::get('pagamentos/confirmar/{id}', [PagamentoController::class, 'confirmar'])->name('pagamentos.confirmar');
 });
 
 // ==========================================
@@ -73,21 +99,26 @@ Route::middleware('auth')->group(function () {
     // 4º VENDAS E CRM
     // ==========================================
     Route::prefix('vendas')->name('vendas.')->group(function () {
-        
+        // Gestão de serviços/oportunidades
         Route::get('/index', [VendasController::class, 'index'])->name('index');
         Route::get('/create', [VendasController::class, 'create'])->name('create');
+        Route::post('/', [VendasController::class, 'store'])->name('store');
         Route::get('/{id}', [VendasController::class, 'show'])->name('show');
-       
-
-        // Gestão de Pipeline
-        Route::get('/pipeline', [VendasController::class, 'pipeline'])->name('pipeline');
-        Route::post('/pipeline/negociacao', [VendasController::class, 'storeNegociacao'])->name('storeNegociacao');
-        Route::patch('/pipeline/{id}/estagio', [VendasController::class, 'updateEstagio'])->name('updateEstagio');
+        Route::get('/{id}/edit', [VendasController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [VendasController::class, 'update'])->name('update');
+        Route::delete('/{id}', [VendasController::class, 'destroy'])->name('destroy');
         
-       
-        // Automação de pedidos
-        Route::post('/pedidos/gerar-proposta', [VendasController::class, 'gerarProposta'])->name('gerarProposta');
-        Route::post('/pedidos/{id}/converter', [VendasController::class, 'converterPedido'])->name('converterPedido');
+        // Pipeline
+        Route::get('/pipeline', [VendasController::class, 'pipeline'])->name('pipeline');
+        Route::patch('/{id}/status', [VendasController::class, 'updateStatus'])->name('updateStatus');
+        
+        // Automação
+        Route::get('/{id}/proposta', [VendasController::class, 'gerarProposta'])->name('gerarProposta');
+        Route::post('/{id}/converter', [VendasController::class, 'converterPedido'])->name('converterPedido');
+        
+        // Base de conhecimento (clientes)
+        Route::get('/clientes', [VendasController::class, 'clientes'])->name('clientes');
+        Route::get('/clientes/{id}', [VendasController::class, 'clientePerfil'])->name('cliente.perfil');
     });
     
     // ==========================================
@@ -111,18 +142,15 @@ Route::middleware('auth')->group(function () {
     // ==========================================
     // 6º FISCAL & CONTABILÍSTICO
     // ==========================================
+    // Fiscal
     Route::prefix('fiscal')->name('fiscal.')->group(function () {
-        
         Route::get('/index', [FiscalController::class, 'index'])->name('index');
-
-        // Exportação
         Route::get('/relatorios', [FiscalController::class, 'relatorios'])->name('relatorios');
-        Route::post('/exportar-contabilista', [FiscalController::class, 'exportar'])->name('exportar');
-        
-        // Arquivo Digital
+        Route::post('/exportar', [FiscalController::class, 'exportar'])->name('exportar');
         Route::get('/arquivo-digital', [FiscalController::class, 'arquivoIndex'])->name('arquivoIndex');
-        Route::post('/arquivo-digital/upload', [FiscalController::class, 'upload'])->name('upload');
-        Route::get('/arquivo-digital/download/{id}', [FiscalController::class, 'download'])->name('download');
+        Route::post('/upload', [FiscalController::class, 'upload'])->name('upload');
+        Route::get('/download/{id}', [FiscalController::class, 'download'])->name('download');
+        Route::delete('/documentos/{id}', [FiscalController::class, 'destroyDocumento'])->name('documentos.destroy');
     });
     
     // ==========================================
@@ -154,9 +182,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/index', [ClienteController::class, 'index'])->name('index');
         Route::get('/create', [ClienteController::class, 'create'])->name('create');
         Route::post('/', [ClienteController::class, 'store'])->name('store');
-        Route::get('/{id}', [ClienteController::class, 'show'])->name('show');
-        Route::get('/{id}/edit', [ClienteController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [ClienteController::class, 'update'])->name('update');
-        Route::delete('/{id}', [ClienteController::class, 'destroy'])->name('destroy');
+        Route::get('/{cliente}', [ClienteController::class, 'show'])->name('show');
+        Route::get('/edit/{cliente}', [ClienteController::class, 'edit'])->name('edit');
+        Route::put('/{cliente}', [ClienteController::class, 'update'])->name('update');
+        Route::delete('/{cliente}', [ClienteController::class, 'destroy'])->name('destroy');
     });
-});
+}); 

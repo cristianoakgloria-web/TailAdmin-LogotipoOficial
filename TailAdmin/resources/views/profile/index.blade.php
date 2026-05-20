@@ -1,9 +1,9 @@
-{{-- Mostrar Roles do usuário (múltiplas roles) --}}
+{{-- Mostrar perfil do usuário (sem roles, sem exclusão) --}}
 @extends('layouts.app')
 
 @section('title', 'Perfil')
 @section('header', 'Perfil do Usuário')
-@section('subheader', 'Gerencie suas informações pessoais e níveis de acesso')
+@section('subheader', 'Gerencie suas informações pessoais')
 
 @section('content')
 <div class="max-w-4xl mx-auto">
@@ -24,7 +24,7 @@
                         </div>
                     @endif
                     
-                    {{-- Badge de verificação (opcional - se não tiver email_verified_at, remover) --}}
+                    {{-- Badge de verificação (opcional) --}}
                     @if(isset($user->email_verified_at) && $user->email_verified_at)
                         <div class="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1">
                             <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -46,48 +46,12 @@
                         <p class="text-xs text-zinc-500">
                             Membro desde {{ $user->created_at->format('F Y') }}
                         </p>
-                        @if($user->cargo)
-                            <span class="text-xs px-2 py-0.5 bg-[#eab308]/10 text-[#eab308] rounded-full">
-                                {{ $user->cargo }}
-                            </span>
-                        @endif
                     </div>
                 </div>
                 
                 <a href="{{ route('profile.edit') }}" class="px-4 py-2 bg-[#eab308] hover:bg-[#ca8a04] text-black font-semibold rounded-xl transition-all duration-200 transform hover:scale-105">
                     Editar Perfil
                 </a>
-            </div>
-        </div>
-
-        {{-- Roles do Utilizador --}}
-        <div class="border-t border-zinc-800 px-6 py-4">
-            <label class="block text-sm font-semibold text-[#eab308]/80 mb-3 uppercase tracking-wider">
-                <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H4v2H2v-3l4-4-1-3.5L4 6l2-2 3.5 1 4-4z" clip-rule="evenodd"/>
-                </svg>
-                Níveis de Acesso
-            </label>
-            <div class="flex flex-wrap gap-2">
-                @forelse($user->roles as $role)
-                    <span class="group relative">
-                        <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-[#eab308]/20 text-[#eab308] 
-                                     border border-[#eab308]/30 hover:bg-[#eab308]/30 transition-all duration-200">
-                            {{ $role->nome }}
-                        </span>
-                        @if($role->descricao)
-                            <span class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 text-xs 
-                                         bg-zinc-800 text-zinc-300 rounded opacity-0 group-hover:opacity-100 
-                                         transition-opacity whitespace-nowrap pointer-events-none">
-                                {{ $role->descricao }}
-                            </span>
-                        @endif
-                    </span>
-                @empty
-                    <span class="px-3 py-1.5 text-xs font-semibold rounded-full bg-zinc-800 text-zinc-400">
-                        Sem permissões especiais
-                    </span>
-                @endforelse
             </div>
         </div>
     </div>
@@ -125,11 +89,6 @@
                             Não informado
                         @endif
                     </p>
-                </div>
-                
-                <div>
-                    <label class="text-xs text-zinc-500 uppercase tracking-wider">Cargo</label>
-                    <p class="text-zinc-300 mt-1">{{ $user->cargo ?? 'Não informado' }}</p>
                 </div>
             </div>
         </div>
@@ -174,7 +133,7 @@
         </div>
     </div>
 
-    {{-- Últimas Atividades --}}
+    {{-- Últimas Atividades (opcional) --}}
     <div class="bg-zinc-900/50 backdrop-blur-sm rounded-2xl border border-zinc-800 p-6 mt-6">
         <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
             <svg class="w-5 h-5 mr-2 text-[#eab308]" fill="currentColor" viewBox="0 0 20 20">
@@ -232,94 +191,11 @@
         </div>
     </div>
 
-    {{-- Botões de Ação --}}
+    {{-- Botões de Ação (apenas edição, sem exclusão) --}}
     <div class="flex justify-end gap-3 mt-6">
         <a href="{{ route('profile.edit') }}" class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-xl transition-all duration-200">
             Alterar Senha
         </a>
-        <button class="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-xl transition-all duration-200" onclick="confirmDelete()">
-            Desativar Conta
-        </button>
     </div>
 </div>
-
-{{-- Modal de Confirmação para Deletar Conta --}}
-<div id="deleteModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50">
-    <div class="bg-zinc-900 rounded-2xl border border-zinc-800 p-6 max-w-md mx-4">
-        <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 bg-red-500/20 rounded-full flex items-center justify-center">
-                <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                </svg>
-            </div>
-            <h3 class="text-xl font-bold text-white">Desativar Conta</h3>
-        </div>
-        <p class="text-zinc-400 mb-6">
-            Tem certeza que deseja desativar sua conta? Esta ação pode ser revertida posteriormente.
-        </p>
-        <div class="flex gap-3 justify-end">
-            <button onclick="closeDeleteModal()" class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-xl transition-all duration-200">
-                Cancelar
-            </button>
-            <form action="{{ route('profile.destroy') }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl transition-all duration-200">
-                    Confirmar
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
-@endsection
-
-@section('scripts')
-<script>
-    // JavaScript para funcionalidades interativas do perfil
-    document.addEventListener('DOMContentLoaded', function() {
-        // Tooltips automáticos para roles
-        const roleSpans = document.querySelectorAll('.group');
-        roleSpans.forEach(span => {
-            span.addEventListener('mouseenter', function() {
-                const innerSpan = this.querySelector('span:first-child');
-                if(innerSpan) innerSpan.classList.add('scale-105');
-            });
-            span.addEventListener('mouseleave', function() {
-                const innerSpan = this.querySelector('span:first-child');
-                if(innerSpan) innerSpan.classList.remove('scale-105');
-            });
-        });
-    });
-    
-    // Modal functions
-    function confirmDelete() {
-        const modal = document.getElementById('deleteModal');
-        if(modal) {
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-    }
-    
-    function closeDeleteModal() {
-        const modal = document.getElementById('deleteModal');
-        if(modal) {
-            modal.classList.remove('flex');
-            modal.classList.add('hidden');
-        }
-    }
-    
-    // Close modal on escape key
-    document.addEventListener('keydown', function(event) {
-        if(event.key === 'Escape') {
-            closeDeleteModal();
-        }
-    });
-    
-    // Close modal on outside click
-    document.getElementById('deleteModal')?.addEventListener('click', function(e) {
-        if(e.target === this) {
-            closeDeleteModal();
-        }
-    });
-</script>
 @endsection

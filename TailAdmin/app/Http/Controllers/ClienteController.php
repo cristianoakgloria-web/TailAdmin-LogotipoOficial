@@ -4,81 +4,65 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class ClienteController
+class ClienteController extends Controller  // Confirme que extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $clientes = Cliente::paginate(10); 
+        // Adicione withCount para contar os serviços (campanhas) de cada cliente
+        $clientes = Cliente::withCount('servicos')->paginate(10);
         return view('clientes.index', compact('clientes'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('clientes.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nome'     => 'required|string|min:3|max:255',
-            'email'    => 'required|email|unique:clientes,email',
-            'cpf_cnpj' => 'required|string|unique:clientes,cpf_cnpj',
-            'telefone' => 'required|string|max:20',
-        ]);
-
-        Cliente::create($request->all());
-        return redirect()->route('clientes.index')
-            ->with('success', 'Cliente criado com sucesso.');
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Cliente $cliente)
     {
+        // Carregue os serviços (campanhas) do cliente para exibir no show
+        $cliente->load('servicos');
         return view('clientes.show', compact('cliente'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Cliente $cliente)
     {
         return view('clientes.edit', compact('cliente'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Cliente $cliente)
+    public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'nome'     => 'required|string|min:3|max:255',
-            'email'    => 'required|email|unique:clientes,email,' . $cliente->id,
-            'cpf_cnpj' => 'required|string|unique:clientes,cpf_cnpj,' . $cliente->id,
-            'telefone' => 'required|string|max:20',
+            'bi'       => 'nullable|string|unique:clientes,bi',
+            'nif'      => 'required|string|unique:clientes,nif',
+            'email'    => 'nullable|email|unique:clientes,email',
+            'telefone' => 'nullable|string|max:20',
         ]);
 
-        $cliente->update($request->all());
+        Cliente::create($validated);
 
         return redirect()->route('clientes.index')
-            ->with('success', 'Cliente atualizado com sucesso!');
+            ->with('success', 'Cliente criado com sucesso.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function update(Request $request, Cliente $cliente)
+    {
+        $validated = $request->validate([
+            'nome'     => 'required|string|min:3|max:255',
+            'bi'       => 'nullable|string|unique:clientes,bi,' . $cliente->id,
+            'nif'      => 'required|string|unique:clientes,nif,' . $cliente->id,
+            'email'    => 'nullable|email|unique:clientes,email,' . $cliente->id,
+            'telefone' => 'nullable|string|max:20',
+        ]);
+
+        $cliente->update($validated);
+
+        return redirect()->route('clientes.index')
+            ->with('success', 'Cliente actualizado com sucesso!');
+    }
+
     public function destroy(Cliente $cliente)
     {
         $cliente->delete();

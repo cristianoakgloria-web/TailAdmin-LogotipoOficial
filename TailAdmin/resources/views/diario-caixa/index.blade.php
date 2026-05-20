@@ -6,14 +6,23 @@
 
 @section('content')
 <div class="space-y-6 animate-fadeUp">
+    {{-- Botão Voltar (topo) --}}
+    <div class="flex items-center gap-4">
+        <a href="{{ url()->previous() }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 transition-all duration-300 text-sm" aria-label="Voltar">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Voltar
+        </a>
+    </div>
 
     {{-- ==================== CARDS DE RESUMO (só se houver diário selecionado) ==================== --}}
     @if($arquivoAtual)
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="bg-gradient-to-br from-[#111114] to-[#0c0c0e] border border-white/5 rounded-2xl p-5 shadow-2xl hover:border-[#eab308]/30 transition-all duration-300">
             <div class="flex items-center justify-between mb-3">
                 <p class="text-zinc-500 text-sm">Saldo Atual</p>
-                <div class="w-10 h-10 rounded-xl bg-[#eab308]/10 flex items-center justify-center">💰</div>
+                <div class="w-10 h-10 rounded-xl bg-[#eab308]/10 flex items-center justify-center text-lg" aria-hidden="true">💰</div>
             </div>
             <h2 class="text-2xl font-bold {{ $saldoAtual >= 0 ? 'text-[#eab308]' : 'text-red-400' }}">
                 {{ number_format($saldoAtual, 2, ',', '.') }} {{ $arquivoAtual->moeda }}
@@ -24,7 +33,7 @@
         <div class="bg-gradient-to-br from-[#111114] to-[#0c0c0e] border border-green-500/10 rounded-2xl p-5 shadow-2xl hover:border-green-500/30 transition-all duration-300">
             <div class="flex items-center justify-between mb-3">
                 <p class="text-zinc-500 text-sm">Entradas</p>
-                <div class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center">📈</div>
+                <div class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center text-lg" aria-hidden="true">📈</div>
             </div>
             <h2 class="text-2xl font-bold text-green-400">{{ number_format($totalEntradas, 2, ',', '.') }} {{ $arquivoAtual->moeda }}</h2>
         </div>
@@ -32,7 +41,7 @@
         <div class="bg-gradient-to-br from-[#111114] to-[#0c0c0e] border border-red-500/10 rounded-2xl p-5 shadow-2xl hover:border-red-500/30 transition-all duration-300">
             <div class="flex items-center justify-between mb-3">
                 <p class="text-zinc-500 text-sm">Saídas</p>
-                <div class="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center">📉</div>
+                <div class="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-lg" aria-hidden="true">📉</div>
             </div>
             <h2 class="text-2xl font-bold text-red-400">{{ number_format($totalSaidas, 2, ',', '.') }} {{ $arquivoAtual->moeda }}</h2>
         </div>
@@ -40,7 +49,7 @@
         <div class="bg-gradient-to-br from-[#111114] to-[#0c0c0e] border border-blue-500/10 rounded-2xl p-5 shadow-2xl hover:border-blue-500/30 transition-all duration-300">
             <div class="flex items-center justify-between mb-3">
                 <p class="text-zinc-500 text-sm">Transações</p>
-                <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">📄</div>
+                <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-lg" aria-hidden="true">📄</div>
             </div>
             <h2 class="text-2xl font-bold text-blue-400">{{ $transacoes->count() }}</h2>
         </div>
@@ -49,17 +58,17 @@
     {{-- BARRA DO DIÁRIO ATUAL --}}
     <div class="bg-gradient-to-r from-[#121216] to-[#0d0d10] border border-[#eab308]/20 rounded-2xl p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4 shadow-xl">
         <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-xl bg-[#eab308]/10 flex items-center justify-center text-xl">📂</div>
+            <div class="w-12 h-12 rounded-xl bg-[#eab308]/10 flex items-center justify-center text-xl" aria-hidden="true">📂</div>
             <div>
                 <h2 class="text-lg font-bold text-white">{{ $arquivoAtual->nome }}</h2>
                 <p class="text-sm text-zinc-500">{{ $arquivoAtual->mes }}/{{ $arquivoAtual->ano }} • {{ $arquivoAtual->moeda }}</p>
             </div>
         </div>
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 flex-wrap">
             <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $arquivoAtual->status === 'rascunho' ? 'bg-yellow-500/10 text-yellow-400' : 'bg-green-500/10 text-green-400' }}">
                 {{ ucfirst($arquivoAtual->status) }}
             </span>
-            <a href="{{ route('diario-caixa.index') }}" class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 transition-all duration-300 text-sm">
+            <a href="{{ route('diario-caixa.index') }}" class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 transition-all duration-300 text-sm" aria-label="Voltar à lista de diários">
                 ← Voltar à lista
             </a>
             <form action="{{ route('diario-caixa.exportar') }}" method="POST" class="inline">
@@ -70,7 +79,7 @@
                 <input type="hidden" name="saldo_anterior" value="{{ $arquivoAtual->saldo_anterior }}">
                 <input type="hidden" name="despesa_anterior" value="{{ $arquivoAtual->despesa_anterior }}">
                 <input type="hidden" name="arquivo_id" value="{{ $arquivoAtual->id }}">
-                <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-green-600 hover:bg-green-500 text-white font-semibold transition-all duration-300 text-sm">
+                <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-green-600 hover:bg-green-500 text-white font-semibold transition-all duration-300 text-sm" aria-label="Exportar Excel">
                     📥 Exportar Excel
                 </button>
             </form>
@@ -80,24 +89,18 @@
 
     {{-- ==================== GESTÃO DE DIÁRIOS ==================== --}}
     <div class="bg-gradient-to-b from-[#111114] to-[#0b0b0d] border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
-        <div class="border-b border-white/5 px-6 py-5 flex items-center justify-between">
+        <div class="border-b border-white/5 px-6 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
                 <h2 class="text-xl font-bold text-white">
-                    @if($arquivoAtual)
-                        Diários de Caixa
-                    @else
-                        📁 Diários de Caixa
-                    @endif
+                    @if($arquivoAtual) Diários de Caixa @else 📁 Diários de Caixa @endif
                 </h2>
                 <p class="text-sm text-zinc-500 mt-1">
-                    @if($arquivoAtual)
-                        Selecione outro diário ou crie um novo.
-                    @else
-                        Selecione ou crie um diário para começar a registar transações.
+                    @if($arquivoAtual) Selecione outro diário ou crie um novo.
+                    @else Selecione ou crie um diário para começar a registar transações.
                     @endif
                 </p>
             </div>
-            <button onclick="abrirModalDiario()" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#eab308] hover:bg-[#d4a007] text-black font-bold transition-all duration-300 hover:scale-[1.02] shadow-lg">
+            <button onclick="abrirModalDiario()" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#eab308] hover:bg-[#d4a007] text-black font-bold transition-all duration-300 hover:scale-[1.02] shadow-lg" aria-label="Criar novo diário">
                 <span class="text-lg">+</span> Novo Diário
             </button>
         </div>
@@ -107,7 +110,7 @@
             <div class="p-5 hover:bg-white/[0.02] transition-all duration-300 {{ request('arquivo_id') == $arquivo->id ? 'bg-[#eab308]/5 border-l-2 border-l-[#eab308]' : '' }}">
                 <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                     <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-2xl {{ request('arquivo_id') == $arquivo->id ? 'bg-[#eab308]/20' : 'bg-[#eab308]/10' }} flex items-center justify-center text-2xl">
+                        <div class="w-14 h-14 rounded-2xl {{ request('arquivo_id') == $arquivo->id ? 'bg-[#eab308]/20' : 'bg-[#eab308]/10' }} flex items-center justify-center text-2xl" aria-hidden="true">
                             {{ request('arquivo_id') == $arquivo->id ? '📂' : '📁' }}
                         </div>
                         <div>
@@ -127,24 +130,22 @@
                                 <span class="px-2 py-1 rounded-full text-xs font-semibold {{ $arquivo->status === 'rascunho' ? 'bg-yellow-500/10 text-yellow-400' : 'bg-green-500/10 text-green-400' }}">
                                     {{ ucfirst($arquivo->status) }}
                                 </span>
-                                @php
-                                    $countTransacoes = \App\Models\Transacao::where('arquivo_caixa_id', $arquivo->id)->count();
-                                @endphp
                                 <span class="text-sm text-zinc-600">•</span>
-                                <span class="text-sm text-zinc-500">{{ $countTransacoes }} transações</span>
+                                {{-- Usando relacionamento para performance --}}
+                                <span class="text-sm text-zinc-500">{{ $arquivo->transacoes()->count() }} transações</span>
                             </div>
                         </div>
                     </div>
                     <div class="flex items-center gap-2 flex-wrap">
                         @if(request('arquivo_id') != $arquivo->id)
-                            <a href="?arquivo_id={{ $arquivo->id }}" class="px-4 py-2 rounded-xl bg-[#eab308]/10 hover:bg-[#eab308]/20 text-[#eab308] font-semibold transition-all duration-300">Abrir</a>
+                            <a href="?arquivo_id={{ $arquivo->id }}" class="px-4 py-2 rounded-xl bg-[#eab308]/10 hover:bg-[#eab308]/20 text-[#eab308] font-semibold transition-all duration-300" aria-label="Abrir diário">Abrir</a>
                         @endif
                         @if($arquivo->arquivo_path)
-                        <a href="{{ asset('storage/' . $arquivo->arquivo_path) }}" class="px-4 py-2 rounded-xl bg-green-500/10 hover:bg-green-500/20 text-green-400 font-semibold transition-all duration-300">📥</a>
+                        <a href="{{ asset('storage/' . $arquivo->arquivo_path) }}" class="px-4 py-2 rounded-xl bg-green-500/10 hover:bg-green-500/20 text-green-400 font-semibold transition-all duration-300" aria-label="Descarregar ficheiro">📥</a>
                         @endif
-                        <form action="{{ route('diario-caixa.arquivos.destroy', $arquivo->id) }}" method="POST" class="inline">
+                        <form action="{{ route('diario-caixa.arquivos.destroy', $arquivo->id) }}" method="POST" class="inline" onsubmit="return confirm('Tem certeza que deseja excluir este diário permanentemente? Esta ação não pode ser desfeita.')">
                             @csrf @method('DELETE')
-                            <button type="submit" onclick="return confirm('Excluir este diário permanentemente?')" class="px-4 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 font-semibold transition-all duration-300">🗑️</button>
+                            <button type="submit" class="px-4 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 font-semibold transition-all duration-300" aria-label="Excluir diário">🗑️</button>
                         </form>
                     </div>
                 </div>
@@ -152,7 +153,7 @@
             @empty
             <div class="py-20 px-6 text-center">
                 <div class="max-w-md mx-auto">
-                    <div class="w-24 h-24 rounded-3xl bg-[#eab308]/10 flex items-center justify-center text-5xl mx-auto mb-6">📂</div>
+                    <div class="w-24 h-24 rounded-3xl bg-[#eab308]/10 flex items-center justify-center text-5xl mx-auto mb-6" aria-hidden="true">📂</div>
                     <h3 class="text-2xl font-bold text-white mb-3">Nenhum diário encontrado</h3>
                     <p class="text-zinc-500 mb-8 leading-relaxed">Crie o primeiro diário de caixa para começar a controlar entradas, saídas e relatórios financeiros.</p>
                     <button onclick="abrirModalDiario()" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#eab308] hover:bg-[#d4a007] text-black font-bold transition-all duration-300 shadow-lg hover:scale-[1.02]">+ Criar Primeiro Diário</button>
@@ -170,7 +171,7 @@
                 <h2 class="text-xl font-bold text-white">Transações</h2>
                 <p class="text-sm text-zinc-500 mt-1">{{ $transacoes->count() }} registos em <span class="text-[#eab308]">{{ $arquivoAtual->nome }}</span></p>
             </div>
-            <button onclick="abrirModalTransacao()" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#eab308] hover:bg-[#d4a007] text-black font-bold transition-all duration-300 hover:scale-[1.02] shadow-lg">
+            <button onclick="abrirModalTransacao()" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#eab308] hover:bg-[#d4a007] text-black font-bold transition-all duration-300 hover:scale-[1.02] shadow-lg" aria-label="Nova transação">
                 + Nova Transação
             </button>
         </div>
@@ -191,7 +192,7 @@
                     @forelse($transacoes as $t)
                     <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-all duration-300 group">
                         <td class="px-5 py-4 text-sm text-zinc-300 whitespace-nowrap">{{ \Carbon\Carbon::parse($t->data_vencimento)->format('d/m/Y') }}</td>
-                        <td class="px-5 py-4 text-sm text-white font-medium max-w-xs truncate">{{ $t->descricao }}</td>
+                        <td class="px-5 py-4 text-sm text-white font-medium max-w-xs truncate" title="{{ $t->descricao }}">{{ $t->descricao }}</td>
                         <td class="px-5 py-4 text-sm text-zinc-500 hidden md:table-cell">{{ $t->categoria ?? 'Geral' }}</td>
                         <td class="px-5 py-4">
                             @if($t->tipo === 'entrada')
@@ -204,14 +205,14 @@
                             {{ $t->tipo === 'saida' ? '−' : '+' }}{{ number_format($t->valor, 2, ',', '.') }} {{ $arquivoAtual->moeda }}
                         </td>
                         <td class="px-5 py-4 text-center">
-                            <button onclick="excluirTransacao({{ $t->id }})" class="px-4 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 text-sm font-semibold transition-all duration-300 opacity-0 group-hover:opacity-100">Excluir</button>
+                            <button onclick="excluirTransacao({{ $t->id }})" class="px-4 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 text-sm font-semibold transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100" aria-label="Excluir transação">Excluir</button>
                         </td>
                     </tr>
                     @empty
                     <tr>
                         <td colspan="6" class="py-20 text-center">
                             <div class="max-w-md mx-auto">
-                                <div class="w-24 h-24 rounded-3xl bg-white/5 flex items-center justify-center text-5xl mx-auto mb-6">📄</div>
+                                <div class="w-24 h-24 rounded-3xl bg-white/5 flex items-center justify-center text-5xl mx-auto mb-6" aria-hidden="true">📄</div>
                                 <h3 class="text-2xl font-bold text-white mb-3">Nenhuma transação</h3>
                                 <p class="text-zinc-500 mb-6 leading-relaxed">O diário <strong class="text-[#eab308]">{{ $arquivoAtual->nome }}</strong> ainda não tem transações.</p>
                                 <button onclick="abrirModalTransacao()" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#eab308] hover:bg-[#d4a007] text-black font-bold transition-all duration-300 shadow-lg">+ Adicionar Primeira Transação</button>
@@ -228,7 +229,7 @@
     <div class="bg-gradient-to-b from-[#111114] to-[#0b0b0d] border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
         <div class="py-20 px-6 text-center">
             <div class="max-w-md mx-auto">
-                <div class="w-24 h-24 rounded-3xl bg-[#eab308]/10 flex items-center justify-center text-5xl mx-auto mb-6">📋</div>
+                <div class="w-24 h-24 rounded-3xl bg-[#eab308]/10 flex items-center justify-center text-5xl mx-auto mb-6" aria-hidden="true">📋</div>
                 <h3 class="text-2xl font-bold text-white mb-3">Selecione um diário</h3>
                 <p class="text-zinc-500 mb-8 leading-relaxed">Escolha um diário existente ou crie um novo para visualizar e gerir as transações.</p>
                 <button onclick="abrirModalDiario()" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#eab308] hover:bg-[#d4a007] text-black font-bold transition-all duration-300 shadow-lg hover:scale-[1.02]">+ Criar Diário</button>
@@ -247,7 +248,7 @@
                 <h2 class="text-xl font-bold text-white">Nova Transação</h2>
                 <p class="text-sm text-zinc-500 mt-1">Diário: <span class="text-[#eab308]">{{ $arquivoAtual->nome ?? '—' }}</span></p>
             </div>
-            <button onclick="fecharModalTransacao()" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 transition-all duration-300 flex items-center justify-center">✕</button>
+            <button onclick="fecharModalTransacao()" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 transition-all duration-300 flex items-center justify-center" aria-label="Fechar">✕</button>
         </div>
         <form action="{{ route('diario-caixa.store') }}" method="POST" class="p-6 space-y-4">
             @csrf
@@ -310,7 +311,7 @@
                 <h2 class="text-xl font-bold text-white">Criar Novo Diário</h2>
                 <p class="text-sm text-zinc-500 mt-1">Configure um novo período financeiro.</p>
             </div>
-            <button onclick="fecharModalDiario()" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 transition-all duration-300 flex items-center justify-center">✕</button>
+            <button onclick="fecharModalDiario()" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 transition-all duration-300 flex items-center justify-center" aria-label="Fechar">✕</button>
         </div>
         <form action="{{ route('diario-caixa.arquivos.store') }}" method="POST" class="p-6 space-y-5">
             @csrf
@@ -362,16 +363,22 @@
     </div>
 </div>
 
-{{-- ==================== TOAST ==================== --}}
+{{-- ==================== TOAST (notificações) ==================== --}}
 @if(session('success'))
-<div id="toast" class="fixed top-5 right-5 bg-green-500/95 text-white px-5 py-4 rounded-2xl shadow-2xl z-50 animate-fadeUp flex items-center gap-3">
-    <span class="text-xl">✅</span> {{ session('success') }}
+<div id="toast" class="fixed top-5 right-5 bg-green-500/95 text-white px-5 py-4 rounded-2xl shadow-2xl z-50 animate-fadeUp flex items-center gap-3" role="alert">
+    <span class="text-xl" aria-hidden="true">✅</span> {{ session('success') }}
 </div>
 @endif
 
 @if(session('error'))
-<div id="toast" class="fixed top-5 right-5 bg-red-500/95 text-white px-5 py-4 rounded-2xl shadow-2xl z-50 animate-fadeUp flex items-center gap-3">
-    <span class="text-xl">⚠️</span> {{ session('error') }}
+<div id="toast" class="fixed top-5 right-5 bg-red-500/95 text-white px-5 py-4 rounded-2xl shadow-2xl z-50 animate-fadeUp flex items-center gap-3" role="alert">
+    <span class="text-xl" aria-hidden="true">⚠️</span> {{ session('error') }}
+</div>
+@endif
+
+@if(session('info'))
+<div id="toast" class="fixed top-5 right-5 bg-blue-500/95 text-white px-5 py-4 rounded-2xl shadow-2xl z-50 animate-fadeUp flex items-center gap-3" role="alert">
+    <span class="text-xl" aria-hidden="true">ℹ️</span> {{ session('info') }}
 </div>
 @endif
 
@@ -379,29 +386,35 @@
 <script>
 // Modais
 function abrirModalTransacao() {
-    document.getElementById('modalTransacao').classList.remove('hidden');
-    document.getElementById('modalTransacao').classList.add('flex');
+    const modal = document.getElementById('modalTransacao');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    // Opcional: foco no primeiro input
+    setTimeout(() => modal.querySelector('input[name="data_vencimento"]')?.focus(), 100);
 }
 function fecharModalTransacao() {
-    document.getElementById('modalTransacao').classList.add('hidden');
-    document.getElementById('modalTransacao').classList.remove('flex');
+    const modal = document.getElementById('modalTransacao');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
 }
 function abrirModalDiario() {
-    document.getElementById('modalDiario').classList.remove('hidden');
-    document.getElementById('modalDiario').classList.add('flex');
+    const modal = document.getElementById('modalDiario');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
 }
 function fecharModalDiario() {
-    document.getElementById('modalDiario').classList.add('hidden');
-    document.getElementById('modalDiario').classList.remove('flex');
+    const modal = document.getElementById('modalDiario');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
 }
 
-// Fechar modais ao clicar fora
+// Fechar modais ao clicar fora do conteúdo
 document.addEventListener('click', function(e) {
     if (e.target.id === 'modalTransacao') fecharModalTransacao();
     if (e.target.id === 'modalDiario') fecharModalDiario();
 });
 
-// Fechar com ESC
+// Fechar com tecla ESC
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         fecharModalTransacao();
@@ -409,36 +422,55 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// Toast
+// Toast (desaparece automaticamente)
 setTimeout(() => {
     const toast = document.getElementById('toast');
     if (toast) {
         toast.style.opacity = '0';
-        toast.style.transition = 'opacity 0.5s';
+        toast.style.transition = 'opacity 0.5s ease';
         setTimeout(() => toast?.remove(), 500);
     }
 }, 4000);
 
-// Excluir transação
+// Excluir transação com feedback melhorado
 async function excluirTransacao(id) {
-    if (!confirm('Tem certeza que deseja excluir esta transação?')) return;
+    if (!confirm('⚠️ Tem certeza que deseja excluir esta transação? Esta ação não pode ser desfeita.')) return;
+    
+    const button = event?.target;
+    if (button) {
+        button.disabled = true;
+        button.textContent = 'A processar...';
+    }
     
     try {
         const response = await fetch(`/diario-caixa/${id}`, {
             method: 'DELETE',
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             }
         });
         
-        if (response.ok) {
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+            // Recarregar a página para actualizar saldos e listagem
             location.reload();
         } else {
-            alert('Erro ao excluir transação.');
+            alert(data.message || 'Erro ao excluir transação. Tente novamente.');
+            if (button) {
+                button.disabled = false;
+                button.textContent = 'Excluir';
+            }
         }
     } catch (error) {
-        alert('Erro: ' + error.message);
+        console.error('Erro na requisição:', error);
+        alert('Erro de conexão. Verifique a sua internet e tente novamente.');
+        if (button) {
+            button.disabled = false;
+            button.textContent = 'Excluir';
+        }
     }
 }
 </script>

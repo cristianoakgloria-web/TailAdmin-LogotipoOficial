@@ -6,8 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cliente extends Model
 {
-    public function pedidos() {
+    protected $fillable = [
+        'nome', 'bi', 'nif', 'email', 'telefone'
+    ];
 
-        return $this->hasMany(Pedido::class);
+    public function servicos()
+    {
+        return $this->hasMany(\App\Models\Servico::class);
+    }
+
+    public function faturas()
+    {
+        return $this->hasMany(Fatura::class);
     }
 }

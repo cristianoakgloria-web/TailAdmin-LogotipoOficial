@@ -9,29 +9,7 @@
         </div>
         
         <!-- Ações do header -->
-        <div class="flex items-center gap-4">
-            <!-- Notificações -->
-            <div x-data="{ open: false }" class="relative">
-                <button @click="open = !open" class="relative p-2 text-gray-400 hover:text-[#eab308] transition">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-                    </svg>
-                    @if(isset($notificationsCount) && $notificationsCount > 0)
-                        <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                    @endif
-                </button>
-                
-                <!-- Dropdown de notificações -->
-                <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-80 bg-[#0c0c0e] border border-[#eab308]/20 rounded-xl shadow-xl z-50" style="display: none;">
-                    <div class="p-3 border-b border-[#eab308]/20">
-                        <h3 class="text-sm font-semibold text-white">Notificações</h3>
-                    </div>
-                    <div class="max-h-96 overflow-y-auto">
-                        <p class="text-center text-sm text-gray-500 py-8">Nenhuma notificação nova</p>
-                    </div>
-                </div>
-            </div>
-            
+        <div class="flex items-center gap-4">            
             <!-- Dropdown do usuário -->
             <div x-data="{ open: false }" class="relative">
                 <button @click="open = !open" class="flex items-center gap-3 p-2 rounded-lg hover:bg-[#eab308]/10 transition">
